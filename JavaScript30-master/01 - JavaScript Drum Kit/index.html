@@ -58,23 +58,37 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-  function removeTransition(e) {
-    if (e.propertyName !== 'transform') return;
-    e.target.classList.remove('playing');
-  }
+//listen for a key down event
+//e is an object full of data passed as a paramter
 
+//With this we can grab out data-key values
   function playSound(e) {
+    //consolelog data key if the window event cathes the correct data key.
     const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
-    if (!audio) return;
-
-    key.classList.add('playing');
-    audio.currentTime = 0;
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if(!audio) return;
+    //reset the audio if window event is invoked... Let's key be repateted
+    audio.currentTime= 0;
+    //play audio
     audio.play();
-  }
+    //add class to key element
+    key.classList.add('playing');
+  };
 
-  const keys = Array.from(document.querySelectorAll('.key'));
+  const keys = document.querySelectorAll('.key');
+  //listen for event called transition end
+
+  function removeTransition(e)
+  {
+    if(e.propertyName !== 'transform') return; // Don't use function if it's not
+    console.log(e.propertyName);
+    this.classList.remove('playing');
+    //'this' is always equal to the instance of the event that is called or accessed
+    //if this is logged in a function, just go to where the function is called and check for the variable or object that is invovled. 'this' will most likely be an object
+  }
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+
   window.addEventListener('keydown', playSound);
 </script>
 
